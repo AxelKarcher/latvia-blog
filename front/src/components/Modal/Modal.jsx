@@ -1,7 +1,7 @@
 import './Modal.scss'
 import {primary, light} from '../../config/colors'
 
-const Modal = ({isOn, handleClose, title}) => {
+const Modal = ({isOn, handleClose, title, Body}) => {
   return (
     <>{
         isOn &&
@@ -16,6 +16,7 @@ const Modal = ({isOn, handleClose, title}) => {
             onClick={(e) => e.stopPropagation()}
           >
             {title && <div id='title' style={{color: primary}}>{title}</div>}
+            <Body handleClose={handleClose} />
           </div>
         </div>
       }

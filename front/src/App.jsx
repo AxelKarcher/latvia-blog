@@ -1,22 +1,18 @@
-import {useState} from 'react'
-
 import './App.scss'
-import Button from './components/Button/Button'
 import {background} from './config/colors'
-import Modal from './components/Modal/Modal'
+import Button from './components/Button/Button'
+
 const App = () => {
 
-  const [modalBool, setModalBool] = useState(false)
+  const test = () => {
+    console.log('HERE')
+  }
+
   return (
     <div id='app-container' style={{backgroundColor: background}}>
-      <Modal
-        isOn={modalBool}
-        handleClose={() => setModalBool(false)}
-        title='Test modale'
-      />
       <Button
-        label='Test'
-        action={() => setModalBool(true)}
+        label='TEST'
+        action={test}
       />
     </div>
   )
