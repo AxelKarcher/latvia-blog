@@ -1,0 +1,23 @@
+#button-container {
+  user-select: none;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 10px 15px;
+  border-radius: 15px;
+  transition: transform 0.1s;
+  font-weight: bold;
+  font-size: 20px;
+
+  #icon {
+    display: flex;
+    align-items: center;
+    font-size: 25px;
+  }
+}
+
+.anim {
+  &:active {
+    transform: scale(0.95);
+  }
+}
