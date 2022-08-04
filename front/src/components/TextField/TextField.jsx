@@ -1,12 +1,12 @@
 import './TextField.scss'
 import {primary, light} from '../../config/colors'
 
-const TextField = ({label, action, value, disabled, style}) => {
+const TextField = ({label, action, value, disabled, style, fullWidth}) => {
   return (
     <div
       id='textfield-container'
       style={{color: light, cursor: disabled ? 'not-allowed' : 'auto',
-        ...style
+        width: fullWidth ? '100%' : 'auto', ...style
       }}
     >
       {label && <div style={{marginBottom: 3}}>{label}</div>}
@@ -14,7 +14,8 @@ const TextField = ({label, action, value, disabled, style}) => {
         disabled={disabled}
         id='input'
         style={{color: disabled ? 'grey' : light, border: '2px solid ' + light,
-          backgroundColor: disabled ? 'lightgrey' : primary
+          backgroundColor: disabled ? 'lightgrey' : primary,
+          width: fullWidth ? '100%' : 'auto'
         }}
         value={value}
         onChange={(e) => action(e.target.value)}

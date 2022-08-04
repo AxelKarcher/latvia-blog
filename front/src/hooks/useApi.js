@@ -3,22 +3,22 @@ import {useState} from 'react'
 const useApi = (apiFunc) => {
 
   const [data, setData] = useState()
-  const [isLoading, setIsLoading] = useState(false)
-  const [isError, setIsError] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [err, setErr] = useState()
 
-  const request = async (...args) => {
+  const req = async (...args) => {
     try {
-      setIsLoading(true)
+      setLoading(true)
       const res = await apiFunc(...args)
       setData(res.data)
-      setIsLoading(false)
+      setLoading(false)
     } catch (error) {
-      setIsError(true)
-      setIsLoading(false)
+      setErr(error)
+      setLoading(false)
     }
   }
 
-  return {data, isLoading, request, isError}
+  return {data, loading, req, err}
 }
 
 export default useApi
