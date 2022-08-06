@@ -1,16 +1,18 @@
-import {useState, useEffect} from 'react'
-
 import './HomePage.scss'
+import UserPanel from '../../components/UserPanel/UserPanel'
+import useApi from '../../hooks/useApi'
+import {create} from '../../api/post'
 
 const HomePage = () => {
 
-  const [token, setToken] = useState()
+  const {data, req, loading} = useApi(create)
 
-  useEffect(() => {setToken(localStorage.getItem('token'))}, [])
+  console.log('data:', data)
 
   return (
     <div id='homepage-container'>
-      HomePage
+      <UserPanel />
+      <input type='file' onChange={(e) => req(e.target.files[0])}/>
     </div>
   )
 }

@@ -6,7 +6,8 @@ import NotFoundPage from './pages/NotFoundPage/NotFoundPage'
 import './App.scss'
 import {background} from './config/colors'
 
-// cacher mdp dans field
+// router back
+// cleaner back
 
 const App = () => {
 

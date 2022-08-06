@@ -1,7 +1,8 @@
 import './TextField.scss'
 import {primary, light} from '../../config/colors'
 
-const TextField = ({label, action, value, disabled, style, fullWidth}) => {
+const TextField = ({label, action, value, disabled, style,
+  fullWidth, isPassword}) => {
   return (
     <div
       id='textfield-container'
@@ -12,6 +13,7 @@ const TextField = ({label, action, value, disabled, style, fullWidth}) => {
       {label && <div style={{marginBottom: 3}}>{label}</div>}
       <input
         disabled={disabled}
+        type={isPassword ? 'password' : ''}
         id='input'
         style={{color: disabled ? 'grey' : light, border: '2px solid ' + light,
           backgroundColor: disabled ? 'lightgrey' : primary,

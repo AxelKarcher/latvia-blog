@@ -20,13 +20,14 @@ const AuthPage = () => {
   const [password, setPassword] = useState('')
   const [isLogin, setIsLogin] = useState(true)
 
-  const {data: registerData, req: registerReq, loading: registerLoading, err: registerErr} = useApi(register)
-  const {data: loginData, req: loginReq, loading: loginLoading, err: loginErr} = useApi(login)
+  const {data: registerData, req: registerReq, loading: registerLoading} = useApi(register)
+  const {data: loginData, req: loginReq, loading: loginLoading} = useApi(login)
 
   useEffect(() => {
     if (!registerData && !loginData) {return}
 
-    localStorage.setItem('token', isLogin ? loginData : registerData)
+    localStorage.setItem('token', isLogin ? loginData?.token : registerData?.token)
+    localStorage.setItem('isAdmin', isLogin ? loginData?.isAdmin : registerData?.isAdmin)
     navigate('/home')
   }, [registerData, loginData])
 
@@ -66,6 +67,7 @@ const AuthPage = () => {
         }
         <TextField
           fullWidth
+          isPassword
           style={{marginBottom: margin}}
           label='Mot de passe'
           value={password}
