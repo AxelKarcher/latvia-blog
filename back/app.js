@@ -16,13 +16,16 @@ const upload = multer({dest: 'uploads/'})
 const fs = require('fs')
 const util = require('util')
 const unlinkFile = util.promisify(fs.unlink)
+const axios = require('axios')
 
 const {getToken} = require('./utils')
-const {uploadImage} = require('./s3')
+const {uploadImage, removeImage} = require('./s3')
 
 app.use(cors())
 app.use(express.json())
 app.listen(process.env.PORT, console.log('Server started on port', process.env.PORT))
+
+
 
 app.post('/auth/register', (req, res) => {
   const {pseudo, mail, password} = req?.body
@@ -35,7 +38,6 @@ app.post('/auth/register', (req, res) => {
       isAdmin: result?.isAdmin
     })
   })
-  res.status(200)
 })
 
 app.post('/auth/login', (req, res) => {
@@ -59,6 +61,8 @@ app.post('/auth/login', (req, res) => {
   })
 })
 
+
+
 app.get('/user/getInfos', (req, res) => {
   const id = getToken(jwt, req)
   const query = 'SELECT * FROM users WHERE FIND_IN_SET(?,id)'
@@ -69,9 +73,26 @@ app.get('/user/getInfos', (req, res) => {
   })
 })
 
+app.post('/user/updateInfos', (req, res) => {
+  const {pseudo, mail, password} = req?.body
+  const id = getToken(jwt, req)
+  const query = 'UPDATE users SET pseudo = ?, mail = ?, password = ? WHERE id = ?'
+
+  db.query(query, [pseudo, mail, password, id], (err, result) => {
+    res.status(err ? 406 : 200)
+    res.send(err || 'DONE')
+  })
+})
+
+
+
 app.post('/post/create', upload.single('image'), async (req, res) => {
   const file = req?.file
-  const query = 'INSERT INTO posts (imageKey) VALUE (?)'
+  const title = req?.body?.string[0]
+  const location = req?.body?.string[1]
+  const description = req?.body?.string[2]
+
+  const query = 'INSERT INTO posts (imageKey, location, title, description) VALUE (?, ?, ?, ?)'
 
   let uploadResult = undefined
 
@@ -80,7 +101,28 @@ app.post('/post/create', upload.single('image'), async (req, res) => {
     await unlinkFile(file.path)
   }
 
-  db.query(query, [uploadResult.Key], (err, result) => {
+  db.query(query, [uploadResult.Key, location, title, description], (err, result) => {
+    res.status(err ? 500 : 200)
+    res.send(err || 'OK')
+  })
+})
+
+app.get('/post/getAll', (req, res) => {
+  const query = 'SELECT * FROM posts'
+
+  db.query(query, (err, result) => {
+    res.send(result)
+  })
+})
+
+app.post('/post/remove', async (req, res) => {
+  const {key} = req?.body
+
+  const query = 'DELETE FROM posts WHERE imageKey = ?'
+
+  await removeImage(key)
+
+  db.query(query, [key], (err, result) => {
     res.status(err ? 500 : 200)
     res.send(err || 'OK')
   })

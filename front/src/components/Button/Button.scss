@@ -5,7 +5,6 @@
   justify-content: center;
   box-sizing: border-box;
   padding: 0 15px;
-  border-radius: 15px;
   transition: transform 0.1s;
   font-weight: bold;
   font-size: 20px;
@@ -18,6 +17,10 @@
 }
 
 .anim {
+  &:hover {
+    transform: scale(1.05);
+  }
+
   &:active {
     transform: scale(0.95);
   }

@@ -6,4 +6,10 @@ const getInfos = (token) => {
   })
 }
 
-export {getInfos}
+const updateInfos = (token, pseudo, mail, password) => {
+  return apiClient.post('/user/updateInfos', {pseudo, mail, password}, {
+    headers: {Authorization: 'Bearer ' + token}
+  })
+}
+
+export {getInfos, updateInfos}

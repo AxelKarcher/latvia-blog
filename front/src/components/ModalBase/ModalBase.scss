@@ -1,5 +1,7 @@
-#modal-container {
-  position: absolute;
+#modalbase-container {
+  position: fixed;
+  top: 0;
+  left: 0;
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -13,8 +15,6 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    padding: 15px;
-    border-radius: 15px;
 
     #title {
       font-weight: bold;

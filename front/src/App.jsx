@@ -8,6 +8,9 @@ import {background} from './config/colors'
 
 // router back
 // cleaner back
+// mdp oublié
+// post datés -> pouvoir filtrer période
+// refaire le drop de fichier
 
 const App = () => {
 

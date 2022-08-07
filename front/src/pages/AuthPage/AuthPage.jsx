@@ -7,7 +7,6 @@ import {secondary, light} from '../../config/colors'
 import {margin, borderRadius, padding} from '../../config/ui'
 import Button from '../../components/Button/Button'
 import TextField from '../../components/TextField/TextField'
-import useApi from '../../hooks/useApi'
 import {register, login} from '../../api/auth'
 import Spinner from '../../components/Spinner/Spinner'
 
@@ -19,24 +18,34 @@ const AuthPage = () => {
   const [mail, setMail] = useState('')
   const [password, setPassword] = useState('')
   const [isLogin, setIsLogin] = useState(true)
+  const [isError, setIsError] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  const {data: registerData, req: registerReq, loading: registerLoading} = useApi(register)
-  const {data: loginData, req: loginReq, loading: loginLoading} = useApi(login)
+  useEffect(() => {if (localStorage.getItem('token')) {navigate('/home')}}, [])
 
-  useEffect(() => {
-    if (!registerData && !loginData) {return}
-
-    localStorage.setItem('token', isLogin ? loginData?.token : registerData?.token)
-    localStorage.setItem('isAdmin', isLogin ? loginData?.isAdmin : registerData?.isAdmin)
-    navigate('/home')
-  }, [registerData, loginData])
+  useEffect(() => {setIsError(false)}, [isLogin])
 
   const handleTry = () => {
+    setIsError(false)
+    setLoading(true)
+
     if (isLogin) {
-      loginReq(pseudo, password)
+      login(pseudo, password)
+        .then(({data}) => handleValues(data))
+        .catch(() => setIsError(true))
+        .finally(() => setLoading(false))
     } else {
-      registerReq(pseudo, mail, password)
+      register(pseudo, password)
+        .then(({data}) => handleValues(data))
+        .catch(() => setIsError(true))
+        .finally(() => setLoading(false))
     }
+  }
+
+  const handleValues = (data) => {
+    localStorage.setItem('token', data?.token)
+    localStorage.setItem('isAdmin', data?.isAdmin)
+    navigate('/home')
   }
 
   return (
@@ -49,6 +58,7 @@ const AuthPage = () => {
         style={{backgroundColor: secondary, borderRadius: borderRadius, padding: padding}}
       >
         <TextField
+          onConfirm={handleTry}
           fullWidth
           style={{marginBottom: margin}}
           label='Pseudo'
@@ -58,6 +68,7 @@ const AuthPage = () => {
         {
           !isLogin &&
           <TextField
+            onConfirm={handleTry}
             fullWidth
             style={{marginBottom: margin}}
             label='Mail'
@@ -66,6 +77,7 @@ const AuthPage = () => {
           />
         }
         <TextField
+          onConfirm={handleTry}
           fullWidth
           isPassword
           style={{marginBottom: margin}}
@@ -74,23 +86,24 @@ const AuthPage = () => {
           action={(e) => setPassword(e)}
         />
         {
-          loginLoading || registerLoading
+          loading
           ?
           <Spinner />
           :
           <>
-          <Button
-            fullWidth
-            disabled={!pseudo || (!isLogin && !mail) || !password}
-            style={{marginBottom: margin}}
-            icon={<GiConfirmed />}
-            action={handleTry}
-          />
-          <Button
-            fullWidth
-            label={isLogin ? 'Je n\'ai pas encore de compte' : 'J\'ai déjà un compte'}
-            action={() => setIsLogin(!isLogin)}
-          />
+            <Button
+              fullWidth
+              disabled={!pseudo || (!isLogin && !mail) || !password}
+              label={isError ? 'Erreur' : ''}
+              style={{marginBottom: margin}}
+              icon={<GiConfirmed />}
+              action={handleTry}
+            />
+            <Button
+              fullWidth
+              label={isLogin ? 'Je n\'ai pas encore de compte' : 'J\'ai déjà un compte'}
+              action={() => setIsLogin(!isLogin)}
+            />
           </>
         }
       </div>
