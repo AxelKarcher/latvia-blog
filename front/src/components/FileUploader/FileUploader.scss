@@ -1,0 +1,29 @@
+#file-uploader-container {
+
+  #input {
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 0 15px;
+    transition: transform 0.1s;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+
+    #icon {
+      display: flex;
+      align-items: center;
+      font-size: 25px;
+    }
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}

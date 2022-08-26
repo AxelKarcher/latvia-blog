@@ -7,6 +7,7 @@ import TextField from '../TextField/TextField'
 import {margin} from '../../config/ui'
 import {light} from '../../config/colors'
 import {create} from '../../api/post'
+import FileUploader from '../FileUploader/FileUploader'
 
 const AddModal = ({isOn, handleClose, title: modalTitle, handleRefresh}) => {
 
@@ -24,7 +25,7 @@ const AddModal = ({isOn, handleClose, title: modalTitle, handleRefresh}) => {
   }, [isOn])
 
   const encode = (target) => {
-    let file = target.files[0]
+    let file = target[0]
     let reader = new FileReader()
 
     setFile(file)
@@ -81,7 +82,7 @@ const AddModal = ({isOn, handleClose, title: modalTitle, handleRefresh}) => {
       <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center',
         justifyContent: 'space-evenly'
       }}>
-        <input type='file' onChange={(e) => encode(e?.target)}/>
+        <FileUploader label='Uploader' action={(e) => encode(e)}/>
         {
           file &&
           <img style={{border: '2px solid ' + light}} height={250} src={preview} />

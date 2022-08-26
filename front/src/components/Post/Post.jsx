@@ -5,10 +5,10 @@ import {IoLocationSharp} from 'react-icons/io5'
 import './Post.scss'
 import PanelBase from '../PanelBase/PanelBase'
 import {margin} from '../../config/ui'
-import {light} from '../../config/colors'
 import Button from '../Button/Button'
 import {remove} from '../../api/post'
 import ConfirmModal from '../ConfirmModal/ConfirmModal'
+import Image from '../Image/Image'
 
 const Post = ({data, style, isAdmin, handleRefresh}) => {
 
@@ -33,13 +33,7 @@ const Post = ({data, style, isAdmin, handleRefresh}) => {
       <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', marginBottom: margin}}>
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 30}}>
           <span>{data?.title}</span>
-          {
-            isAdmin &&
-            <Button
-              icon={<MdDelete />}
-              action={() => setModalStatus(true)}
-            />
-          }
+          {isAdmin && <Button icon={<MdDelete />} action={() => setModalStatus(true)} />}
         </div>
         {
           data?.location &&
@@ -50,15 +44,9 @@ const Post = ({data, style, isAdmin, handleRefresh}) => {
         }
       </div>
       <div style={{display: 'flex', justifyContent: 'center'}}>
-        <img
-          style={{border: '2px solid ' + light}}
-          src={'https://d7478umur8r5c.cloudfront.net/' + data?.imageKey}
-          width='20%'
-        />
+        <Image noDownload src={'https://d7478umur8r5c.cloudfront.net/' + data?.imageKey} />
       </div>
-      <div style={{fontWeight: 'normal', fontSize: 20, marginTop: margin}}>
-        {data?.description}
-      </div>
+      <div style={{fontWeight: 'normal', fontSize: 20, marginTop: margin}}>{data?.description}</div>
     </PanelBase>
   )
 }
